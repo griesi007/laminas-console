@@ -63,8 +63,8 @@ class DefaultRouteMatcher implements RouteMatcherInterface
         array $constraints = [],
         array $defaults = [],
         array $aliases = [],
-        array $filters = null,
-        array $validators = null
+        ?array $filters = null,
+        ?array $validators = null
     ) {
         $this->defaults = $defaults;
         $this->constraints = $constraints;
