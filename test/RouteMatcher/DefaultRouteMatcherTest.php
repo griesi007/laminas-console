@@ -987,7 +987,7 @@ class DefaultRouteMatcherTest extends TestCase
                 }
                 $this->assertEquals(
                     $value,
-                    isset($match[$key]) ? $match[$key] : null,
+                    $match[$key] ?? null,
                     $msg
                 );
             }
@@ -1098,7 +1098,7 @@ class DefaultRouteMatcherTest extends TestCase
             foreach ($params as $key => $value) {
                 $this->assertSame(
                     $value,
-                    isset($match[$key]) ? $match[$key] : null,
+                    $match[$key] ?? null,
                     $value === null ? "Param $key is not present" : "Param $key is present and is equal to '$value'"
                 );
             }
@@ -1278,7 +1278,7 @@ class DefaultRouteMatcherTest extends TestCase
             foreach ($params as $key => $value) {
                 $this->assertEquals(
                     $value,
-                    isset($match[$key]) ? $match[$key] : null,
+                    $match[$key] ?? null,
                     $value === null ? "Param $key is not present" : "Param $key is present and is equal to $value"
                 );
             }
@@ -1413,7 +1413,7 @@ class DefaultRouteMatcherTest extends TestCase
         foreach ($params as $key => $value) {
             $this->assertEquals(
                 $value,
-                isset($match[$key]) ? $match[$key] : null,
+                $match[$key] ?? null,
                 $value === null ? "Param $key is not present" : "Param $key is present and is equal to $value"
             );
         }
@@ -1421,7 +1421,7 @@ class DefaultRouteMatcherTest extends TestCase
 
     public function testConstructorDoesNotAcceptInvalidFilters()
     {
-        $this->expectException('Laminas\Console\Exception\InvalidArgumentException');
+        $this->expectException(\Laminas\Console\Exception\InvalidArgumentException::class);
         new DefaultRouteMatcher('<foo>', [], [], [], [
             new \stdClass()
         ]);
@@ -1429,7 +1429,7 @@ class DefaultRouteMatcherTest extends TestCase
 
     public function testConstructorDoesNotAcceptInvalidValidators()
     {
-        $this->expectException('Laminas\Console\Exception\InvalidArgumentException');
+        $this->expectException(\Laminas\Console\Exception\InvalidArgumentException::class);
         new DefaultRouteMatcher('<foo>', [], [], [], [], [
             new \stdClass()
         ]);

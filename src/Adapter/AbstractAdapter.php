@@ -168,20 +168,11 @@ abstract class AbstractAdapter implements AdapterInterface
 
         // Draw horizontal lines
         if ($lineStyle !== static::LINE_NONE) {
-            switch ($lineStyle) {
-                case static::LINE_SINGLE:
-                    $lineChar = $charset::LINE_SINGLE_EW;
-                    break;
-
-                case static::LINE_DOUBLE:
-                    $lineChar = $charset::LINE_DOUBLE_EW;
-                    break;
-
-                case static::LINE_BLOCK:
-                default:
-                    $lineChar = $charset::LINE_BLOCK_EW;
-                    break;
-            }
+            $lineChar = match ($lineStyle) {
+                static::LINE_SINGLE => $charset::LINE_SINGLE_EW,
+                static::LINE_DOUBLE => $charset::LINE_DOUBLE_EW,
+                default => $charset::LINE_BLOCK_EW,
+            };
 
             $this->setPos($x1 + 1, $y1);
             $this->write(str_repeat($lineChar, $width - 2), $color, $bgColor);
@@ -192,21 +183,12 @@ abstract class AbstractAdapter implements AdapterInterface
         // Draw vertical lines and fill
         if (is_numeric($fillStyle)
             && $fillStyle !== static::FILL_NONE) {
-            switch ($fillStyle) {
-                case static::FILL_SHADE_LIGHT:
-                    $fillChar = $charset::SHADE_LIGHT;
-                    break;
-                case static::FILL_SHADE_MEDIUM:
-                    $fillChar = $charset::SHADE_MEDIUM;
-                    break;
-                case static::FILL_SHADE_DARK:
-                    $fillChar = $charset::SHADE_DARK;
-                    break;
-                case static::FILL_BLOCK:
-                default:
-                    $fillChar = $charset::BLOCK;
-                    break;
-            }
+            $fillChar = match ($fillStyle) {
+                static::FILL_SHADE_LIGHT => $charset::SHADE_LIGHT,
+                static::FILL_SHADE_MEDIUM => $charset::SHADE_MEDIUM,
+                static::FILL_SHADE_DARK => $charset::SHADE_DARK,
+                default => $charset::BLOCK,
+            };
         } elseif ($fillStyle) {
             $fillChar = StringUtils::getWrapper()->substr($fillStyle, 0, 1);
         } else {
@@ -219,18 +201,11 @@ abstract class AbstractAdapter implements AdapterInterface
                 $this->write(str_repeat($fillChar, $width), $fillColor, $fillBgColor);
             }
         } else {
-            switch ($lineStyle) {
-                case static::LINE_DOUBLE:
-                    $lineChar = $charset::LINE_DOUBLE_NS;
-                    break;
-                case static::LINE_BLOCK:
-                    $lineChar = $charset::LINE_BLOCK_NS;
-                    break;
-                case static::LINE_SINGLE:
-                default:
-                    $lineChar = $charset::LINE_SINGLE_NS;
-                    break;
-            }
+            $lineChar = match ($lineStyle) {
+                static::LINE_DOUBLE => $charset::LINE_DOUBLE_NS,
+                static::LINE_BLOCK => $charset::LINE_BLOCK_NS,
+                default => $charset::LINE_SINGLE_NS,
+            };
 
             for ($y = $y1 + 1; $y < $y2; $y++) {
                 $this->setPos($x1, $y);
@@ -529,7 +504,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $f = fopen('php://stdin', 'r');
         do {
             $char = fread($f, 1);
-        } while ("" === $char || ($mask !== null && false === strstr($mask, $char)));
+        } while ("" === $char || ($mask !== null && !str_contains($mask, $char)));
         fclose($f);
         return $char;
     }

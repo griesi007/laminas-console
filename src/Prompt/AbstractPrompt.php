@@ -71,13 +71,13 @@ abstract class AbstractPrompt implements PromptInterface
      */
     public static function prompt()
     {
-        if (get_called_class() === __CLASS__) {
+        if (static::class === self::class) {
             throw new Exception\BadMethodCallException(
                 'Cannot call prompt() on AbstractPrompt class. Use one of the Laminas\Console\Prompt\ subclasses.'
             );
         }
 
-        $refl     = new ReflectionClass(get_called_class());
+        $refl     = new ReflectionClass(static::class);
         $instance = $refl->newInstanceArgs(func_get_args());
         return $instance->show();
     }

@@ -209,7 +209,7 @@ class WindowsAnsicon extends Posix
 
                 // Fetch the char from mask
                 $char = substr($mask, $return - 1, 1);
-            } while ("" === $char || ($mask !== null && false === strstr($mask, $char)));
+            } while ("" === $char || ($mask !== null && !str_contains($mask, $char)));
 
             return $char;
         }
@@ -247,9 +247,7 @@ class WindowsAnsicon extends Posix
             $mask = strtr($mask, "\n", "\r");
 
             // Prepare a list of ASCII codes from mask chars
-            $asciiMask = array_map(function ($char) {
-                return ord($char);
-            }, str_split($mask));
+            $asciiMask = array_map(fn($char) => ord($char), str_split($mask));
             $asciiMask = array_unique($asciiMask);
 
             // Char mask filtering is now handled by the PowerShell itself,

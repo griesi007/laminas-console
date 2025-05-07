@@ -74,7 +74,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
             foreach ($filters as $name => $filter) {
                 if (! $filter instanceof FilterInterface) {
                     throw new Exception\InvalidArgumentException(
-                        'Cannot use ' . gettype($filters) . ' as filter for ' . __CLASS__
+                        'Cannot use ' . gettype($filters) . ' as filter for ' . self::class
                     );
                 }
                 $this->filters[$name] = $filter;
@@ -85,7 +85,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
             foreach ($validators as $name => $validator) {
                 if (! $validator instanceof ValidatorInterface) {
                     throw new Exception\InvalidArgumentException(
-                        'Cannot use ' . gettype($validator) . ' as validator for ' . __CLASS__
+                        'Cannot use ' . gettype($validator) . ' as validator for ' . self::class
                     );
                 }
                 $this->validators[$name] = $validator;
@@ -310,9 +310,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
 
                 // prepare item
                 $item = [
-                    'name'          => isset($m['groupName'])
-                        ? $m['groupName']
-                        : 'unnamedGroup' . $unnamedGroupCounter++,
+                    'name'          => $m['groupName'] ?? 'unnamedGroup' . $unnamedGroupCounter++,
                     'literal'       => true,
                     'required'      => false,
                     'positional'    => true,
@@ -348,9 +346,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
 
                 // prepare item
                 $item = [
-                    'name'          => isset($m['groupName'])
-                        ? $m['groupName']
-                        : 'unnamedGroupAt' . $unnamedGroupCounter++,
+                    'name'          => $m['groupName'] ?? 'unnamedGroupAt' . $unnamedGroupCounter++,
                     'literal'       => true,
                     'required'      => true,
                     'positional'    => true,
@@ -391,9 +387,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
 
                 // prepare item
                 $item = [
-                    'name'          => isset($m['groupName'])
-                        ? $m['groupName']
-                        : 'unnamedGroupAt' . $unnamedGroupCounter++,
+                    'name'          => $m['groupName'] ?? 'unnamedGroupAt' . $unnamedGroupCounter++,
                     'literal'       => false,
                     'required'      => true,
                     'positional'    => false,
@@ -434,9 +428,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
 
                 // prepare item
                 $item = [
-                    'name'          => isset($m['groupName'])
-                        ? $m['groupName']
-                        : 'unnamedGroupAt' . $unnamedGroupCounter++,
+                    'name'          => $m['groupName'] ?? 'unnamedGroupAt' . $unnamedGroupCounter++,
                     'literal'       => false,
                     'required'      => false,
                     'positional'    => false,
@@ -506,10 +498,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
      */
     private function getCanonicalName($name)
     {
-        if (isset($this->aliases[$name])) {
-            return $this->aliases[$name];
-        }
-        return $name;
+        return $this->aliases[$name] ?? $name;
     }
 
     /**
@@ -679,7 +668,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
                 } else {
                     foreach ($part['alternatives'] as $alt) {
                         if ($alt === $matchedName && ! isset($matches[$alt])) {
-                            $matches[$alt] = isset($this->defaults[$alt]) ? $this->defaults[$alt] : true;
+                            $matches[$alt] = $this->defaults[$alt] ?? true;
                         } elseif (! isset($matches[$alt])) {
                             $matches[$alt] = false;
                         }
@@ -750,7 +739,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
                 // from all alternatives set matching parameter to TRUE and the rest to FALSE
                 foreach ($part['alternatives'] as $alt) {
                     if ($alt == $value) {
-                        $matches[$alt] = isset($this->defaults[$alt]) ? $this->defaults[$alt] : true;
+                        $matches[$alt] = $this->defaults[$alt] ?? true;
                     } else {
                         $matches[$alt] = false;
                     }
@@ -761,7 +750,7 @@ class DefaultRouteMatcher implements RouteMatcherInterface
             } elseif (! $part['required']) {
                 // set optional parameter flag
                 $name = $part['name'];
-                $matches[$name] = isset($this->defaults[$name]) ? $this->defaults[$name] : true;
+                $matches[$name] = $this->defaults[$name] ?? true;
             }
 
             /*

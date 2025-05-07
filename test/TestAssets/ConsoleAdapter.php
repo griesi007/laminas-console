@@ -63,7 +63,7 @@ class ConsoleAdapter extends AbstractAdapter
         }
         do {
             $char = fread($this->stream, 1);
-        } while ("" === $char || ($mask !== null && false === strstr($mask, $char)));
+        } while ("" === $char || ($mask !== null && !str_contains($mask, $char)));
         return $char;
     }
 

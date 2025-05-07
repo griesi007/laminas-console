@@ -27,7 +27,7 @@ class ConsoleTest extends TestCase
         $this->assertTrue(Console::isConsole());
         $className = Console::detectBestAdapter();
         $adpater = new $className;
-        $this->assertInstanceOf('Laminas\Console\Adapter\AdapterInterface', $adpater);
+        $this->assertInstanceOf(\Laminas\Console\Adapter\AdapterInterface::class, $adpater);
 
         Console::overrideIsConsole(false);
 
@@ -55,27 +55,27 @@ class ConsoleTest extends TestCase
     public function testCanGetInstance()
     {
         $console = Console::getInstance();
-        $this->assertInstanceOf('Laminas\Console\Adapter\AdapterInterface', $console);
+        $this->assertInstanceOf(\Laminas\Console\Adapter\AdapterInterface::class, $console);
     }
 
     public function testCanNotGetInstanceInNoConsoleMode()
     {
         Console::overrideIsConsole(false);
-        $this->expectException('Laminas\Console\Exception\RuntimeException');
+        $this->expectException(\Laminas\Console\Exception\RuntimeException::class);
         Console::getInstance();
     }
 
     public function testCanForceInstance()
     {
         $console = Console::getInstance('Posix');
-        $this->assertInstanceOf('Laminas\Console\Adapter\AdapterInterface', $console);
-        $this->assertInstanceOf('Laminas\Console\Adapter\Posix', $console);
+        $this->assertInstanceOf(\Laminas\Console\Adapter\AdapterInterface::class, $console);
+        $this->assertInstanceOf(\Laminas\Console\Adapter\Posix::class, $console);
 
         Console::overrideIsConsole(null);
         Console::resetInstance();
 
         $console = Console::getInstance('Windows');
-        $this->assertInstanceOf('Laminas\Console\Adapter\AdapterInterface', $console);
-        $this->assertInstanceOf('Laminas\Console\Adapter\Windows', $console);
+        $this->assertInstanceOf(\Laminas\Console\Adapter\AdapterInterface::class, $console);
+        $this->assertInstanceOf(\Laminas\Console\Adapter\Windows::class, $console);
     }
 }

@@ -12,7 +12,7 @@ use Laminas\Stdlib\Message;
 use Laminas\Stdlib\Parameters;
 use Laminas\Stdlib\RequestInterface;
 
-class Request extends Message implements RequestInterface
+class Request extends Message implements RequestInterface, \Stringable
 {
     /**
      * @var \Laminas\Stdlib\Parameters
@@ -173,7 +173,7 @@ class Request extends Message implements RequestInterface
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString();
     }

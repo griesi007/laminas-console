@@ -101,14 +101,14 @@ class GetoptTest extends TestCase
 
     public function testGetoptExceptionForMissingFlag()
     {
-        $this->expectException('\Laminas\Console\Exception\InvalidArgumentException');
+        $this->expectException(\Laminas\Console\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('Blank flag not allowed in rule');
         $opts = new Getopt(['|a' => 'Apple option']);
     }
 
     public function testGetoptExceptionForKeyWithDuplicateFlagsViaOrOperator()
     {
-        $this->expectException('\Laminas\Console\Exception\InvalidArgumentException');
+        $this->expectException(\Laminas\Console\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('defined more than once');
         $opts = new Getopt(
             ['apple|apple' => 'apple-option']
@@ -117,7 +117,7 @@ class GetoptTest extends TestCase
 
     public function testGetoptExceptionForKeysThatDuplicateFlags()
     {
-        $this->expectException('\Laminas\Console\Exception\InvalidArgumentException');
+        $this->expectException(\Laminas\Console\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('defined more than once');
         $opts = new Getopt(
             ['a' => 'Apple option', 'apple|a' => 'Apple option']
@@ -152,7 +152,7 @@ class GetoptTest extends TestCase
             ],
             ['--apple']
         );
-        $this->expectException('\Laminas\Console\Exception\RuntimeException');
+        $this->expectException(\Laminas\Console\Exception\RuntimeException::class);
         $this->expectExceptionMessage('requires a parameter');
         $opts->parse();
     }
@@ -253,7 +253,7 @@ class GetoptTest extends TestCase
     public function testGetoptAddSetNonArrayArguments()
     {
         $opts = new Getopt('abp:', ['-foo']);
-        $this->expectException('\Laminas\Console\Exception\InvalidArgumentException');
+        $this->expectException(\Laminas\Console\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('should be an array');
         $opts->setArguments('-a');
     }
@@ -281,7 +281,7 @@ class GetoptTest extends TestCase
             ['-a', '--', '--fakeflag'],
             [Getopt::CONFIG_DASHDASH => false]
         );
-        $this->expectException('\Laminas\Console\Exception\RuntimeException');
+        $this->expectException(\Laminas\Console\Exception\RuntimeException::class);
         $this->expectExceptionMessage('not recognized');
         $opts->parse();
     }
@@ -357,7 +357,7 @@ class GetoptTest extends TestCase
         $opts = new Getopt('abp:', ['--apple']);
         $opts->setAliases(['a' => 'apple']);
 
-        $this->expectException('\Laminas\Console\Exception\InvalidArgumentException');
+        $this->expectException(\Laminas\Console\Exception\InvalidArgumentException::class);
         $this->expectExceptionMessage('defined more than once');
         $opts->setAliases(['b' => 'apple']);
     }
@@ -368,7 +368,7 @@ class GetoptTest extends TestCase
         $opts->setAliases(['c' => 'cumquat']);
         $opts->setArguments(['-c']);
 
-        $this->expectException('\Laminas\Console\Exception\RuntimeException');
+        $this->expectException(\Laminas\Console\Exception\RuntimeException::class);
         $this->expectExceptionMessage('not recognized');
         $opts->parse();
     }
@@ -544,7 +544,7 @@ class GetoptTest extends TestCase
     {
         $opts = new Getopt('abp:', ['-', 'file1']);
 
-        $this->expectException('\Laminas\Console\Exception\RuntimeException');
+        $this->expectException(\Laminas\Console\Exception\RuntimeException::class);
         $opts->parse();
     }
 
@@ -684,7 +684,7 @@ class GetoptTest extends TestCase
             ['red', 'green', '-3']
         );
 
-        $this->expectException('\Laminas\Console\Exception\RuntimeException');
+        $this->expectException(\Laminas\Console\Exception\RuntimeException::class);
         $opts->parse();
     }
 
@@ -707,7 +707,7 @@ class GetoptTest extends TestCase
             [Getopt::CONFIG_NUMERIC_FLAGS => true]
         );
 
-        $this->expectException('\Laminas\Console\Exception\RuntimeException');
+        $this->expectException(\Laminas\Console\Exception\RuntimeException::class);
         $opts->parse();
     }
 
@@ -777,9 +777,7 @@ class GetoptTest extends TestCase
     public function testOptionCallbackReturnsFallsAndThrowException()
     {
         $opts = new Getopt('x', ['-x']);
-        $opts->setOptionCallback('x', function () {
-            return false;
-        });
+        $opts->setOptionCallback('x', fn() => false);
         $opts->parse();
     }
 }

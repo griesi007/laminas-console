@@ -49,7 +49,7 @@ abstract class Console
 
         if ($forceAdapter !== null) {
             // Use the supplied adapter class
-            if (0 === strpos($forceAdapter, '\\')) {
+            if (str_starts_with($forceAdapter, '\\')) {
                 $className = $forceAdapter;
             } elseif (stristr($forceAdapter, '\\')) {
                 $className = __NAMESPACE__ . '\\' . ltrim($forceAdapter, '\\');
@@ -78,7 +78,7 @@ abstract class Console
 
         // Try to use the supplied charset class
         if ($forceCharset !== null) {
-            if (0 === strpos($forceCharset, '\\')) {
+            if (str_starts_with($forceCharset, '\\')) {
                 $className = $forceCharset;
             } elseif (false !== stripos($forceAdapter, '\\')) {
                 $className = __NAMESPACE__ . '\\' . ltrim($forceCharset, '\\');

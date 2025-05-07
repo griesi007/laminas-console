@@ -66,7 +66,7 @@ namespace Laminas\Console;
  * Example:  'abc:' means options '-a', '-b', and '-c'
  * are legal, and the latter requires a string parameter.
  */
-class Getopt
+class Getopt implements \Stringable
 {
     /**
      * The options for a given application can be in multiple formats.
@@ -278,7 +278,7 @@ class Getopt
      *
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString();
     }
@@ -473,9 +473,9 @@ class Getopt
         $doc->appendChild($optionsNode);
         foreach ($this->options as $flag => $value) {
             $optionNode = $doc->createElement('option');
-            $optionNode->setAttribute('flag', utf8_encode($flag));
+            $optionNode->setAttribute('flag', mb_convert_encoding($flag, 'UTF-8', 'ISO-8859-1'));
             if ($value !== true) {
-                $optionNode->setAttribute('parameter', utf8_encode($value));
+                $optionNode->setAttribute('parameter', mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1'));
             }
             $optionsNode->appendChild($optionNode);
         }
@@ -672,9 +672,9 @@ class Getopt
                     break;
                 }
             }
-            if (0 === strpos($argv[0], '--')) {
+            if (str_starts_with($argv[0], '--')) {
                 $this->_parseLongOption($argv);
-            } elseif (0 === strpos($argv[0], '-') && ('-' != $argv[0] || count($argv) > 1)) {
+            } elseif (str_starts_with($argv[0], '-') && ('-' != $argv[0] || count($argv) > 1)) {
                 $this->_parseShortOptionCluster($argv);
             } elseif ($this->getoptConfig[self::CONFIG_PARSEALL]) {
                 $this->remainingArgs[] = array_shift($argv);
@@ -825,7 +825,7 @@ class Getopt
                 }
                 break;
             case 'optional':
-                if (count($argv) > 0 && 0 !== strpos($argv[0], '-')) {
+                if (count($argv) > 0 && !str_starts_with($argv[0], '-')) {
                     $param = array_shift($argv);
                     $this->_checkParameterType($realFlag, $param);
                 } else {
@@ -1043,14 +1043,10 @@ class Getopt
                 }
             }
             if (isset($delimiter)) {
-                switch ($delimiter) {
-                    case self::PARAM_REQUIRED:
-                        $rule['param'] = 'required';
-                        break;
-                    case self::PARAM_OPTIONAL:
-                    default:
-                        $rule['param'] = 'optional';
-                }
+                $rule['param'] = match ($delimiter) {
+                    self::PARAM_REQUIRED => 'required',
+                    default => 'optional',
+                };
                 switch (substr($paramType, 0, 1)) {
                     case self::TYPE_WORD:
                         $rule['paramType'] = 'word';
